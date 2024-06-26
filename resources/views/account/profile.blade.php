@@ -4,13 +4,16 @@
     <div class="row my-5">
         <div class="col-md-3">
             <div class="card border-0 shadow-lg">
-                <div class="card-header  text-white" style="background-color:#526cff">
+                <div class="card-header  text-white">
                     Welcome, {{Auth::user()->name}}
                 </div>
-                <div class="card-body">
+                <div class="card-body" >
                     <div class="text-center mb-3">
                         @if (Auth::user()->image !="")
-                        <img src="{{asset('upload/profile/'.Auth::user()->image)}}" class="img-fluid rounded-circle" alt="$user->name" >
+                        {{-- <img src="{{asset('upload/profile/'.Auth::user()->image)}}" class="img-fluid rounded-circle" alt="$user->name" > --}}
+                        <div style="width: 200px; height: 200px; margin: auto;">
+                            <img src="{{asset('upload/profile/'.Auth::user()->image)}}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" class="img-fluid rounded-circle" alt="{{ Auth::user()->name }}">
+                        </div>
                         @endif
                     </div>
                     <div class="h5 text-center">
@@ -51,11 +54,13 @@
                             <span class="text-danger">{{$errors->first('email')}}</span>
                         @endif
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" >
                         <label for="name" class="form-label">Image</label>
                         <input type="file" name="image" id="image" class="form-control">
                         @if (Auth::user()->image !="")
-                        <img src="{{asset('upload/profile/'.Auth::user()->image)}}" class="img-fluid mt-4" alt="{{$user->name}}">
+                        <div style="width: 100px; margin-top: 1rem;">
+                            <img src="{{asset('upload/profile/'.Auth::user()->image)}}" style="width: 100%; height: auto;" class="img-fluid mt-4" alt="{{ Auth::user()->name }}">
+                        </div>
                         @endif
                         @if ($errors->has('image'))
                             <span class="text-danger">{{$errors->first('image')}}</span>

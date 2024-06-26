@@ -10,7 +10,9 @@
                 <div class="card-body">
                     <div class="text-center mb-3">
                         @if (Auth::user()->image !="")
-                        <img src="{{asset('upload/profile/'.Auth::user()->image)}}" class="img-fluid rounded-circle" alt="$user->name" >
+                        <div style="width: 200px; height: 200px; margin: auto;">
+                            <img src="{{asset('upload/profile/'.Auth::user()->image)}}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" class="img-fluid rounded-circle" alt="{{ Auth::user()->name }}">
+                        </div>
                         @endif
                     </div>
                     <div class="h5 text-center">

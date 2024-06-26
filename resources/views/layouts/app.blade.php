@@ -10,7 +10,7 @@
         <link rel="stylesheet" href={{asset('css/style.css')}}>
     </head>
     <body class="bg-light">
-        <div class="container-fluid shadow-lg header" style="background-color: #526cff">
+        <div class="container-fluid shadow-lg header">
             <div class="container">
                 <div class="d-flex justify-content-between">
                     <h1 class="text-center"><a href="index.html" class="h3 text-white text-decoration-none">Book Review App</a></h1>
