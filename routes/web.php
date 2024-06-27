@@ -21,6 +21,9 @@ Route::get('/', function () {
 });
 
 Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('book/{id}',[HomeController::class,'details'])->name('book.detail');
+Route::post('save-book-review',[HomeController::class,'saveReview'])->name('book.saveReview');
+
 Route::group(['prefix'=>'account'],function(){
     Route::group(['middleware'=>'guest'],function(){
         Route::get('register',[AccountController::class,'register'])->name('account.register');
