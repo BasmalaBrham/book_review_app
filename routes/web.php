@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,14 @@ Route::group(['prefix'=>'account'],function(){
         Route::get('books/edit\{id}',[BookController::class,'edit'])->name('books.edit');
         Route::post('books/edit\{id}',[BookController::class,'update'])->name('books.update');
         Route::delete('books',[BookController::class,'destroy'])->name('books.destroy');
+        Route::get('reviews',[ReviewController::class,'index'])->name('account.reviews');
+        Route::get('reviews/{id}', [ReviewController::class, 'edit'])->name('account.reviews.edit');
+        Route::post('reviews/{id}', [ReviewController::class, 'updateReview'])->name('account.reviews.updateReview');
+        Route::post('delete-review', [ReviewController::class, 'deleteReview'])->name('account.reviews.deleteReview');
+        Route::get('my-reviews', [AccountController::class, 'myReviews'])->name('account.myReviews');
+        Route::get('my-reviews/{id}', [AccountController::class, 'editReview'])->name('account.myReviews.editReview');
+        Route::post('my-reviews/{id}', [AccountController::class, 'updateReview'])->name('account.myReviews.updateReview');
+        Route::post('delete-my-reviews/{id}', [AccountController::class, 'deleteReview'])->name('account.myReviews.deleteReview');
 
     });
 

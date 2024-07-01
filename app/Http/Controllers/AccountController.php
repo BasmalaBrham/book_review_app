@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use App\Models\User;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -95,4 +97,59 @@ class AccountController extends Controller
         Auth::logout();
         return redirect()->route('account.login');
     }
+
+    //to show  reviews
+    public function myReviews(Request $request){
+        $reviews = Review::with('book')->where('users_id',Auth::user()->id);
+        $reviews = $reviews->orderBy('created_at','DESC');
+        if(!empty($request->keyword)){
+            $reviews = $reviews->where('review','like','%'.$request->keyword.'%');
+        }
+        $reviews = $reviews->paginate(2);
+        return view('account.my-reviews.my-reviews',['reviews'=>$reviews]);
+    }
+
+    //to edit my the review
+    public function editReview($id){
+        $review=Review::where([
+            'id'=>$id,
+            'users_id'=>Auth::user()->id
+        ])->with('book')->first();
+        return view('account.my-reviews.edit-review',['review'=>$review]);
+    }
+
+    public function updateReview($id, Request $request)
+    {
+        $review = Review::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'review' => 'required',
+            'rate' => 'required|integer|between:1,5',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('account.myReviews.editReview', $id)
+                             ->withInput()
+                             ->withErrors($validator);
+        }
+
+        $review->review = $request->review;
+        $review->rate = $request->rate;
+        $review->save();
+
+        session()->flash('success', 'Review updated successfully');
+        return redirect()->route('account.myReviews');
+    }
+
+    //to delete review
+    public function deleteReview(Request $request){
+        $id = $request->id;
+        $review = Review::find($id);
+        if($review == null){
+            return response()->json(['status' => false]);
+        }
+        $review->delete();
+        session()->flash('success', 'Review deleted successfully');
+        return response()->json(['status' => true, 'message' => 'Review deleted successfully']);
+    }
+
 }
