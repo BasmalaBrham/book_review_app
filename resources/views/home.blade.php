@@ -28,7 +28,7 @@
                     @foreach ($books as $book )
                         <div class="col-md-4 col-lg-3 mb-4">
                             <div class="card border-0 shadow-lg">
-                                <a href="detail.html">
+                                <a href="{{route("book.detail",$book->id)}}">
                                     @if (file_exists(public_path('upload/books/' . $book->image)) && $book->image !='')
                                     <div style="width: 100%; height: 250px; overflow: hidden;">
                                         <img src="{{asset('upload/books/'.$book->image)}}" alt="{{$book->title}}" style="width: 100%; height: 100%; object-fit: cover;">

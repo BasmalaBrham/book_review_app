@@ -4,7 +4,7 @@
     <div class="row my-5">
         <div class="col-md-3">
             <div class="card border-0 shadow-lg">
-                <div class="card-header  text-white" style="background-color:#526cff">
+                <div class="card-header  text-white" >
                     Welcome, {{Auth::user()->name}}
                 </div>
                 <div class="card-body">
