@@ -22,7 +22,6 @@ class ReviewController extends Controller
         $review = Review::findOrFail($id);
         return view('account.reviews.edit', ['review' => $review]);
     }
-    //method will update review
     // method will update review
     public function updateReview($id, Request $request) {
         $review = Review::findOrFail($id);
@@ -56,5 +55,5 @@ class ReviewController extends Controller
         session()->flash('success', 'Review deleted successfully');
         return response()->json(['status' => true]);
     }
-    
+
 }

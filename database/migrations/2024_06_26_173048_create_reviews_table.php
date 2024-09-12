@@ -17,12 +17,10 @@ return new class extends Migration
             $table->id();
             $table->text('review');
             $table->integer('rate');
-            $table->unsignedBigInteger('users_id');
-            $table->unsignedBigInteger('books_id');
-            $table->foreign('user_id')->constrained()->onDelete('cascade');
-            $table->foreign('book_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->integer('status')->default(0);
-            $table->timestamps();
+             $table->timestamps();
         });
     }
 

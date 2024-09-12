@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function index( Request $request){
-        $books=Book::orderBy('created_at','Desc');
+        $books=Book::withCount('reviews')->withSum('reviews','rate')->orderBy('created_at','Desc');
 
         if(!empty($request->keyword)){
             $books->where('title','like','%'.$request->keyword.'%');
@@ -24,17 +24,17 @@ class HomeController extends Controller
 
     //to show book details
     public function details($id){
-        $book = Book::with(['reviews.user','reviews'])->findOrFail($id);
+        $book = Book::with(['reviews.user','reviews'])->withCount('reviews')->withSum('reviews','rate')->findOrFail($id);
         if($book->status == 0){
             abort(404);
         }
-        $relatedBooks = Book::where('status',1)->where('id','!=',$id)->take(3)->inRandomOrder()->get();
+        $relatedBooks = Book::where('status',1)->withCount('reviews')->withSum('reviews','rate')->take(3)->where('id','!=',$id)->inRandomOrder()->get();
         return view('BookDetails',['book'=>$book,'relatedBooks'=>$relatedBooks]);
     }
     //to save review in db
     public function saveReview(Request $request) {
         $validator = Validator::make($request->all(), [
-            'review' => 'required|min:10',
+            'review' => 'required|min:5',
             'rating' => 'required|integer|min:1|max:5',
         ]);
         if ($validator->fails()) {

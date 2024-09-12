@@ -16,7 +16,7 @@ class BookController extends Controller
         if(!empty($request->keyword)){
             $books->where('title','like','%'.$request->keyword.'%');
         }
-        $books=$books->paginate(3);
+        $books=$books->withCount('reviews')->withSum('reviews','rate')->paginate(3);
         return view('books.list',[
             'books'=>$books
         ]);
@@ -123,5 +123,5 @@ class BookController extends Controller
             ]);
         }
     }
-   
+
 }

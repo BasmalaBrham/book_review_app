@@ -12,12 +12,20 @@
                     <img src="{{asset('upload/books/'.$book->image)}}" alt="$book->title" class="card-img-top">
                     @endif
                 </div>
+                @php
+                    if($book->reviews_count){
+                        $avarageRating = $book->reviews_sum_rate / $book->reviews_count;
+                    }else {
+                        $avarageRating=0;
+                    }
+                        $avarageRatingPer = ($avarageRating*100)/5
+                    @endphp
                 <div class="col-md-8">
                     @include('layouts.message')
                     <h3 class="h2 mb-3">{{$book->title}}</h3>
                     <div class="h4 text-muted">{{$book->author}}</div>
                     <div class="star-rating d-inline-flex ml-2" title="">
-                        <span class="rating-text theme-font theme-yellow">5.0</span>
+                        <span class="rating-text theme-font theme-yellow">{{number_format($avarageRating,1)}}</span>
                         <div class="star-rating d-inline-flex mx-2" title="">
                             <div class="back-stars ">
                                 <i class="fa fa-star " aria-hidden="true"></i>
@@ -26,7 +34,7 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
 
-                                <div class="front-stars" style="width: 100%">
+                                <div class="front-stars" style="width: {{ $avarageRatingPer}}%">
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
@@ -36,6 +44,8 @@
                             </div>
                         </div>
                         <span class="theme-font text-muted">(0 Review)</span>
+                        <span class="theme-font text-muted">({{($book->reviews_count > 1) ? $book->reviews_count. 'Reviews' : $book->reviews_count. 'Review' }})</span>
+
                     </div>
 
                     <div class="content mt-3">
@@ -59,11 +69,19 @@
                                                 <img src="{{asset('upload/books/'.$relatedBook->image)}}" alt="{{$relatedBook->title}}" class="card-img-top">
                                             @endif
                                         </a>
+                                        @php
+                                            if($book->reviews_count){
+                                                $avarageRating = $book->reviews_sum_rate / $book->reviews_count;
+                                            }else {
+                                                $avarageRating=0;
+                                            }
+                                            $avarageRatingPer = ($avarageRating*100)/5
+                                        @endphp
                                         <div class="card-body">
                                             <h3 class="h4 heading"><a href="{{route("book.detail",$relatedBook->id)}}">{{$relatedBook->title}}</a></h3>
                                             <p>{{$relatedBook->author}}</p>
                                             <div class="star-rating d-inline-flex ml-2" title="">
-                                                <span class="rating-text theme-font theme-yellow">0.0</span>
+                                                <span class="rating-text theme-font theme-yellow">{{number_format($avarageRating,1)}}</span>
                                                 <div class="star-rating d-inline-flex mx-2" title="">
                                                     <div class="back-stars ">
                                                         <i class="fa fa-star " aria-hidden="true"></i>
@@ -72,7 +90,7 @@
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
 
-                                                        <div class="front-stars" style="width: 70%">
+                                                        <div class="front-stars" style="width: {{$avarageRatingPer}}%">
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -81,7 +99,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <span class="theme-font text-muted">(0)</span>
+                                                {{-- <span class="theme-font text-muted">(0)</span> --}}
+                                                <span class="theme-font text-muted">({{($relatedBook->reviews_count > 1) ? $relatedBook->reviews_count. 'Reviews' : $relatedBook->reviews_count. 'Review' }})</span>
                                             </div>
                                         </div>
                                     </div>
@@ -165,6 +184,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" id="bookReviewForm" name="bookReviewForm">
+                @csrf
                 <input type="hidden" name="book_id" value="{{$book->id}}">
                 <div class="modal-body">
                     <div class="mb-3">
